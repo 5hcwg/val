@@ -56,8 +56,12 @@
     }
 
     h1 {
-      font-size: clamp(26px, 4vw, 44px);
+      font-size: clamp(22px, 4vw, 40px);
       margin: 12px 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
     .button-zone {
@@ -152,14 +156,14 @@
       <path d="M190 144 C186 144 182 148 182 152 C182 160 190 164 190 170 C190 164 198 160 198 152 C198 148 194 144 190 144Z" fill="#ff7aa2"/>
     </svg>
 
-    <h1>Clarisse veux-tu être ma Valentine ?</h1>
+    <h1>🌷 Clarisse veux-tu être ma Valentine ? 🌷</h1>
 
     <section class="button-zone" id="zone">
       <button id="yesBtn">Oui</button>
       <button id="noBtn">Non</button>
     </section>
 
-    <div class="hint" id="hint">« Non » semble un peu timide 😈</div>
+    <div class="hint" id="hint">« Non » semble un peu timide</div>
 
     <section class="result" id="result">
       <h2>OUIII ! 🎉</h2>
@@ -189,11 +193,21 @@
     function fullScreenConfetti() {
       const end = Date.now() + 1600;
       (function frame() {
-        confettiInstance({ particleCount: 12, spread: 90, startVelocity: 45, origin: { x: Math.random(), y: Math.random() * 0.3 } });
+        confettiInstance({ 
+          particleCount: 12, 
+          spread: 90, 
+          startVelocity: 45, 
+          origin: { x: Math.random(), y: Math.random() * 0.3 } 
+        });
         if (Date.now() < end) requestAnimationFrame(frame);
       })();
       setTimeout(() => {
-        confettiInstance({ particleCount: 300, spread: 140, startVelocity: 60, origin: { x: 0.5, y: 0.5 } });
+        confettiInstance({ 
+          particleCount: 300, 
+          spread: 140, 
+          startVelocity: 60, 
+          origin: { x: 0.5, y: 0.5 } 
+        });
       }, 300);
     }
 
