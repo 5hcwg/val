@@ -163,7 +163,7 @@
       <button id="noBtn">Non</button>
     </section>
 
-    <div class="hint" id="hint">« Non » semble un peu timide</div>
+    <div class="hint" id="hint">« Non » semble timide</div>
 
     <section class="result" id="result">
       <h2>OUIII ! 🎉</h2>
@@ -193,21 +193,11 @@
     function fullScreenConfetti() {
       const end = Date.now() + 1600;
       (function frame() {
-        confettiInstance({ 
-          particleCount: 12, 
-          spread: 90, 
-          startVelocity: 45, 
-          origin: { x: Math.random(), y: Math.random() * 0.3 } 
-        });
+        confettiInstance({ particleCount: 12, spread: 90, startVelocity: 45, origin: { x: Math.random(), y: Math.random() * 0.3 } });
         if (Date.now() < end) requestAnimationFrame(frame);
       })();
       setTimeout(() => {
-        confettiInstance({ 
-          particleCount: 300, 
-          spread: 140, 
-          startVelocity: 60, 
-          origin: { x: 0.5, y: 0.5 } 
-        });
+        confettiInstance({ particleCount: 300, spread: 140, startVelocity: 60, origin: { x: 0.5, y: 0.5 } });
       }, 300);
     }
 
