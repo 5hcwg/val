@@ -9,8 +9,8 @@
 
   <style>
     :root {
-      --bg1: #ffd6e7;
-      --bg2: #ffeef6;
+      --bg-start: #ffeef6;
+      --bg-end: #ffd6e7;
       --card: #ffffffcc;
       --yes: #ff3b7a;
     }
@@ -22,9 +22,10 @@
       min-height: 100svh;
       display: grid;
       place-items: center;
-      background: radial-gradient(circle at top, var(--bg2), var(--bg1));
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
       font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
+      transition: background 1s ease;
     }
 
     #confettiCanvas {
@@ -44,8 +45,9 @@
       -webkit-backdrop-filter: blur(10px);
       border-radius: 24px;
       text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,.15);
+      box-shadow: 0 20px 60px rgba(0,0,0,.1);
       position: relative;
+      z-index: 10;
     }
 
     .intro-gif {
@@ -55,8 +57,8 @@
     }
 
     h1 {
-      font-size: clamp(22px, 6vw, 38px);
-      color: #333;
+      font-size: clamp(20px, 6vw, 34px);
+      color: #444;
       margin: 15px 0;
     }
 
@@ -76,7 +78,7 @@
       border-radius: 50px;
       border: none;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
       transition: transform 0.2s;
     }
 
@@ -93,25 +95,24 @@
       left: 50%;
       top: 50%;
       transform: translate(10%, -50%);
-      background: #eee;
-      color: #555;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: #f0f0f0;
+      color: #777;
     }
 
     .result {
       display: none;
-      animation: pop 0.5s forwards;
+      animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
     .final-gif {
       width: 100%;
       max-width: 400px;
       border-radius: 20px;
-      margin-top: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
     @keyframes pop {
-      from { transform: scale(0.5); opacity: 0; }
+      from { transform: scale(0.8); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
   </style>
@@ -120,10 +121,10 @@
 
   <canvas id="confettiCanvas"></canvas>
 
-  <main class="card">
+  <main class="card" id="mainCard">
     <div id="mainContent">
       <img src="https://i.gifer.com/ED1G.gif" class="intro-gif">
-      <h1>🌷 Clarisse, veux-tu être ma Valentine ? 🌷</h1>
+      <h1>Clarisse, veux-tu être ma Valentine ?</h1>
       <div class="button-zone" id="zone">
         <button id="yesBtn">OUI !</button>
         <button id="noBtn">Non</button>
@@ -131,7 +132,6 @@
     </div>
 
     <div class="result" id="result">
-      <h2 style="font-size: 40px; color: #ff3b7a; margin: 0;">INCROYABLE ! 😍</h2>
       <img class="final-gif" src="https://64.media.tumblr.com/a531812986744b45833a4a52b3757c45/tumblr_mkusmvCzRp1rv7cdvo2_500.gif">
     </div>
   </main>
@@ -154,7 +154,7 @@
         noBtn.style.top = y + 'px';
         noBtn.style.transform = 'none';
 
-        scale += 0.4; // Grossit rapidement
+        scale += 0.4;
         yesBtn.style.left = "50%";
         yesBtn.style.top = "50%";
         yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
@@ -167,31 +167,40 @@
         document.getElementById('mainContent').style.display = 'none';
         document.getElementById('result').style.display = 'block';
         
-        const colors = ['#ff3b7a', '#ffffff', '#ff99bb', '#ff0055'];
-        
-        // Explosion initiale massive
-        myConfetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors });
-        myConfetti({ particleCount: 100, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors });
-        myConfetti({ particleCount: 100, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors });
+        // Changement vers un fond rosâtre plus uni
+        document.body.style.background = "#fce4ec";
+        document.getElementById('mainCard').style.background = "rgba(255, 255, 255, 0.6)";
 
-        // Pluie prolongée (10 secondes)
-        const end = Date.now() + 10000;
+        const colors = ['#ff3b7a', '#ffffff', '#ffb2d1', '#ff80ab'];
+        const end = Date.now() + 15000;
+
         (function frame() {
+            // Confettis fins (scalar réduit) mais nombreux
             myConfetti({
-                particleCount: 5,
-                angle: Math.random() * 360,
-                spread: 90,
-                origin: { x: Math.random(), y: Math.random() - 0.2 },
-                colors: colors
+                particleCount: 4, // Génération continue
+                angle: 60,
+                spread: 55,
+                origin: { x: 0, y: 0.6 },
+                colors: colors,
+                scalar: 0.7 // Plus petits/fins
             });
-            // Coeurs aléatoires
-            if(Math.random() > 0.7) {
+            myConfetti({
+                particleCount: 4,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1, y: 0.6 },
+                colors: colors,
+                scalar: 0.7
+            });
+
+            // Pluie légère du haut
+            if (Math.random() > 0.5) {
                 myConfetti({
                     particleCount: 2,
-                    shapes: ['heart'],
-                    scalar: 2,
-                    origin: { x: Math.random(), y: Math.random() - 0.2 },
-                    colors: ['#ff3b7a', '#ff0000']
+                    origin: { x: Math.random(), y: -0.1 },
+                    gravity: 0.8,
+                    scalar: 0.6,
+                    colors: colors
                 });
             }
 
