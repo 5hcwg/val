@@ -23,7 +23,7 @@
       display: grid;
       place-items: center;
       background: radial-gradient(circle at top, var(--bg2), var(--bg1));
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
       overflow: hidden;
     }
 
@@ -49,20 +49,16 @@
       z-index: 10;
     }
 
-    .heart-svg {
-      width: 100px;
-      animation: beat 1s infinite ease-in-out;
-    }
-
-    @keyframes beat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
+    .intro-gif {
+      width: min(200px, 60vw);
+      border-radius: 15px;
+      margin-bottom: 10px;
     }
 
     h1 {
       font-size: clamp(22px, 6vw, 38px);
       color: #333;
-      margin: 20px 0;
+      margin: 15px 0;
     }
 
     .button-zone {
@@ -82,7 +78,7 @@
       border: none;
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     #yesBtn {
@@ -98,9 +94,9 @@
       left: 50%;
       top: 50%;
       transform: translate(10%, -50%);
-      background: #eee;
+      background: #ececec;
       color: #555;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .result {
@@ -110,9 +106,10 @@
 
     .final-gif {
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
       border-radius: 20px;
       margin-top: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     @keyframes pop {
@@ -127,10 +124,10 @@
 
   <main class="card">
     <div id="mainContent">
-      <svg class="heart-svg" viewBox="0 0 32 32">
-        <path d="M16 28.5C16 28.5 2 20.5 2 10.5C2 6.5 5 3.5 9 3.5C11.5 3.5 14 5 16 7.5C18 5 20.5 3.5 23 3.5C27 3.5 30 6.5 30 10.5C30 20.5 16 28.5 16 28.5Z" fill="#ff3b7a"/>
-      </svg>
+      <img src="https://i.gifer.com/ED1G.gif" alt="Cute Bear" class="intro-gif">
+      
       <h1>🌷 Clarisse, veux-tu être ma Valentine ? 🌷</h1>
+      
       <div class="button-zone" id="zone">
         <button id="yesBtn">OUI !</button>
         <button id="noBtn">Non</button>
@@ -138,8 +135,8 @@
     </div>
 
     <div class="result" id="result">
-      <h2 style="font-size: 50px; color: #ff3b7a;">INCROYABLE ! 😍</h2>
-      <img class="final-gif" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3Bhem9keGZuY3hzMWtlMzJlbTZzMmR5dnN0aGV2bnc0ZnE1anMyeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/D7FKeDLnNzeBmJRjp9/giphy.gif">
+      <h2 style="font-size: 50px; color: #ff3b7a; margin: 0;">INCROYABLE ! 😍</h2>
+      <img class="final-gif" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3Bhem9keGZuY3hzMWtlMzJlbTZzMmR5dnN0aGV2bnc0ZnE1anMyeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/D7FKeDLnNzeBmJRjp9/giphy.gif" alt="Happy Dance">
     </div>
   </main>
 
@@ -155,17 +152,21 @@
     function moveNo() {
         const z = zone.getBoundingClientRect();
         const b = noBtn.getBoundingClientRect();
+        
+        // Calcul pour rester dans la zone
         const x = Math.random() * (z.width - b.width);
         const y = Math.random() * (z.height - b.height);
         
         noBtn.style.left = x + 'px';
         noBtn.style.top = y + 'px';
+        noBtn.style.right = 'auto';
         noBtn.style.transform = 'none';
 
-        scale += 0.3;
-        yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        // Le bouton OUI devient énorme
+        scale += 0.4;
         yesBtn.style.left = "50%";
         yesBtn.style.top = "50%";
+        yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
     }
 
     noBtn.addEventListener('mouseover', moveNo);
@@ -175,50 +176,55 @@
         document.getElementById('mainContent').style.display = 'none';
         document.getElementById('result').style.display = 'block';
         
-        // --- LA TEMPÊTE DE CONFETTIS ---
-        const end = Date.now() + (15 * 1000); // Dure 15 secondes
-        const colors = ['#ff3b7a', '#ffffff', '#ff99bb', '#ff0000', '#ffd6e7'];
+        // --- TEMPÊTE DE CONFETTIS EXTRÊME ---
+        const duration = 20 * 1000; // 20 secondes de folie
+        const animationEnd = Date.now() + duration;
+        const colors = ['#ff3b7a', '#ffffff', '#ff99bb', '#ff0000', '#ffd6e7', '#ff69b4'];
 
         (function frame() {
-            // Explosion du centre
+            // Canons latéraux permanents
             myConfetti({
-                particleCount: 15,
+                particleCount: 20,
                 angle: 60,
-                spread: 70,
-                origin: { x: 0 },
+                spread: 80,
+                origin: { x: 0, y: 0.7 },
                 colors: colors
             });
             myConfetti({
-                particleCount: 15,
+                particleCount: 20,
                 angle: 120,
-                spread: 70,
-                origin: { x: 1 },
+                spread: 80,
+                origin: { x: 1, y: 0.7 },
                 colors: colors
             });
 
-            // Pluie du haut (Cœurs et flocons)
+            // Pluie de cœurs et confettis aléatoires partout
             myConfetti({
-                particleCount: 5,
-                shapes: ['heart'],
-                scalar: 2,
+                particleCount: 10,
+                startVelocity: 30,
+                spread: 360,
+                ticks: 60,
                 origin: { x: Math.random(), y: Math.random() - 0.2 },
-                colors: ['#ff3b7a', '#ff0000']
+                colors: colors,
+                shapes: ['heart', 'circle']
             });
 
-            if (Date.now() < end) {
+            if (Date.now() < animationEnd) {
                 requestAnimationFrame(frame);
             }
         }());
 
-        // Un gros final après 1 seconde
-        setTimeout(() => {
+        // Rafales massives toutes les 2 secondes
+        const fireworks = setInterval(() => {
+            if (Date.now() > animationEnd) return clearInterval(fireworks);
             myConfetti({
-                particleCount: 500,
-                spread: 160,
-                origin: { y: 0.6 },
+                particleCount: 200,
+                startVelocity: 50,
+                spread: 180,
+                origin: { x: Math.random(), y: 0.5 },
                 colors: colors
             });
-        }, 1000);
+        }, 2000);
     });
   </script>
 </body>
