@@ -24,7 +24,7 @@
       display: grid;
       place-items: center;
       background: radial-gradient(circle at top, var(--bg2), var(--bg1));
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       overflow: hidden;
       padding: 16px;
     }
@@ -47,7 +47,6 @@
       border-radius: 22px;
       text-align: center;
       box-shadow: 0 18px 60px rgba(0,0,0,.15);
-      position: relative;
     }
 
     .art {
@@ -57,7 +56,6 @@
       filter: drop-shadow(0 10px 14px rgba(0,0,0,.12));
     }
 
-    /* Animation du cœur qui bat */
     .heart-svg {
       transform-origin: 282px 50px;
       animation: beat 1.2s infinite ease-in-out;
@@ -93,7 +91,7 @@
       box-shadow: 0 10px 24px rgba(0,0,0,.1);
       user-select: none;
       -webkit-tap-highlight-color: transparent;
-      transition: transform .2s ease, background .2s ease;
+      transition: transform .2s ease;
     }
 
     #yesBtn {
@@ -123,7 +121,6 @@
 
     .result {
       display: none;
-      margin-top: 10px;
       animation: pop .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
@@ -133,10 +130,11 @@
       margin-bottom: 20px;
     }
 
-    .fireworks {
+    .final-gif {
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
       border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
     @keyframes pop {
@@ -183,7 +181,7 @@
 
     <section class="result" id="result">
       <h2>OUIII ! 🎉</h2>
-      <img class="fireworks" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzNhM3ZidTRqczQwd2JrNWgyaTZxMTdxYWIxbXNlYWFxZHA0MHplayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/s2qXK8wAvkHTO/giphy.gif" alt="Célébration" />
+      <img class="final-gif" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3Bhem9keGZuY3hzMWtlMzJlbTZzMmR5dnN0aGV2bnc0ZnE1anMyeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/D7FKeDLnNzeBmJRjp9/giphy.gif" alt="Happy Dance" />
     </section>
   </main>
 
@@ -195,7 +193,6 @@
     const mainContent = document.getElementById("mainContent");
     const confettiCanvas = document.getElementById("confettiCanvas");
 
-    // Gestion des confettis
     function resizeConfettiCanvas() {
       const dpr = window.devicePixelRatio || 1;
       confettiCanvas.width = window.innerWidth * dpr;
@@ -207,21 +204,33 @@
     const confettiInstance = confetti.create(confettiCanvas, { resize: false, useWorker: true });
 
     function launchConfetti() {
-      const end = Date.now() + 2000;
-      (function frame() {
-        confettiInstance({ particleCount: 10, spread: 80, origin: { y: 0.6 }, colors: ['#ff3b7a', '#ff99bb', '#ffffff'] });
-        if (Date.now() < end) requestAnimationFrame(frame);
-      })();
+      const duration = 3 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+      function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        confettiInstance({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+        confettiInstance({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+      }, 250);
     }
 
-    // Faire grandir le bouton OUI
     let yesScale = 1;
     function growYes() {
-      yesScale = Math.min(3, yesScale + 0.15);
+      yesScale = Math.min(4, yesScale + 0.2);
       yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
     }
 
-    // Faire fuir le bouton NON
     function moveNo() {
       const z = zone.getBoundingClientRect();
       const b = noBtn.getBoundingClientRect();
@@ -229,12 +238,12 @@
       const maxX = z.width - b.width;
       const maxY = z.height - b.height;
       
-      const randomX = Math.max(0, Math.floor(Math.random() * maxX));
-      const randomY = Math.max(0, Math.floor(Math.random() * maxY));
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
 
       noBtn.style.left = randomX + "px";
       noBtn.style.top = randomY + "px";
-      noBtn.style.right = "auto"; // Annule le positionnement initial
+      noBtn.style.right = "auto";
       
       growYes();
     }
