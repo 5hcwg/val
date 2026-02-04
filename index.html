@@ -58,7 +58,7 @@
     }
 
     h1 {
-      font-size: clamp(20px, 6vw, 32px);
+      font-size: clamp(20px, 5.5vw, 32px);
       color: #444;
       margin: 15px 0;
     }
@@ -113,7 +113,7 @@
     }
 
     .message-final {
-      font-size: 45px;
+      font-size: clamp(30px, 8vw, 45px);
       color: #ff3b7a;
       font-weight: bold;
       margin: 0 0 10px 0;
@@ -132,7 +132,7 @@
   <main class="card" id="mainCard">
     <div id="mainContent">
       <img src="https://i.gifer.com/ED1G.gif" class="intro-gif">
-      <h1>Clarisse, veux-tu être ma Valentine ?</h1>
+      <h1>🌷 Clarisse, veux-tu être ma Valentine ? 🌷</h1>
       <div class="button-zone" id="zone">
         <button id="yesBtn">OUI !</button>
         <button id="noBtn">Non</button>
@@ -140,7 +140,7 @@
     </div>
 
     <div class="result" id="result">
-      <div class="message-final">ouiiiiiiii 🌷🌷🌷</div>
+      <div class="message-final">🌷 ouiiiiiiii 🌷</div>
       <img class="final-gif" src="https://64.media.tumblr.com/a531812986744b45833a4a52b3757c45/tumblr_mkusmvCzRp1rv7cdvo2_500.gif">
     </div>
   </main>
@@ -176,7 +176,6 @@
         document.getElementById('mainContent').style.display = 'none';
         document.getElementById('result').style.display = 'block';
         
-        // Fond rosâtre uni et carte plus transparente
         document.body.style.background = "#fce4ec";
         document.getElementById('mainCard').style.background = "rgba(255, 255, 255, 0.4)";
 
@@ -184,7 +183,6 @@
         const end = Date.now() + 15000;
 
         (function frame() {
-            // Canons latéraux - Nombreux mais fins (scalar: 0.6)
             myConfetti({
                 particleCount: 6,
                 angle: 60,
@@ -202,7 +200,6 @@
                 scalar: 0.6
             });
 
-            // Pluie fine continue du haut
             if (Math.random() > 0.4) {
                 myConfetti({
                     particleCount: 3,
