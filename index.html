@@ -24,7 +24,7 @@
       display: grid;
       place-items: center;
       background: radial-gradient(circle at top, var(--bg2), var(--bg1));
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
       padding: 16px;
     }
@@ -50,7 +50,7 @@
     }
 
     .art {
-      width: min(240px, 70vw);
+      width: min(220px, 65vw);
       margin: 0 auto 10px;
       display: block;
       filter: drop-shadow(0 10px 14px rgba(0,0,0,.12));
@@ -75,7 +75,7 @@
     .button-zone {
       position: relative;
       width: 100%;
-      height: 180px;
+      height: 200px;
       margin: 0 auto;
       touch-action: none;
     }
@@ -100,7 +100,7 @@
       transform: translateY(-50%);
       background: var(--yes);
       color: #fff;
-      z-index: 5;
+      z-index: 10;
     }
 
     #noBtn {
@@ -109,14 +109,7 @@
       transform: translateY(-50%);
       background: #ececec;
       color: #444;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .hint {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #888;
-      font-style: italic;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .result {
@@ -125,16 +118,17 @@
     }
 
     .result h2 {
-      font-size: clamp(32px, 6vw, 50px);
+      font-size: clamp(32px, 8vw, 60px);
       color: var(--yes);
       margin-bottom: 20px;
+      text-shadow: 2px 2px 0px white;
     }
 
     .final-gif {
       width: 100%;
       max-width: 450px;
       border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
     @keyframes pop {
@@ -175,8 +169,6 @@
         <button id="yesBtn">Oui !</button>
         <button id="noBtn">Non</button>
       </section>
-
-      <div class="hint" id="hint">Le bouton « Non » est un peu timide...</div>
     </div>
 
     <section class="result" id="result">
@@ -203,61 +195,82 @@
 
     const confettiInstance = confetti.create(confettiCanvas, { resize: false, useWorker: true });
 
-    function launchConfetti() {
-      const duration = 3 * 1000;
+    function launchMassiveConfetti() {
+      const duration = 10 * 1000; // 10 secondes de fête !
       const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-      function randomInRange(min, max) {
-        return Math.random() * (max - min) + min;
-      }
+      const defaults = { startVelocity: 45, spread: 360, ticks: 100, zIndex: 10000 };
 
       const interval = setInterval(function() {
         const timeLeft = animationEnd - Date.now();
 
-        if (timeLeft <= 0) {
-          return clearInterval(interval);
-        }
+        if (timeLeft <= 0) return clearInterval(interval);
 
-        const particleCount = 50 * (timeLeft / duration);
-        confettiInstance({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-        confettiInstance({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
-      }, 250);
+        const particleCount = 80; // Beaucoup plus de particules par salve
+
+        // Confettis classiques
+        confettiInstance({ 
+          ...defaults, 
+          particleCount, 
+          origin: { x: Math.random(), y: Math.random() - 0.2 },
+          colors: ['#ff3b7a', '#ff99bb', '#ffffff', '#ff0055', '#ff99cc']
+        });
+
+        // Ajout de confettis en forme de COEURS
+        confettiInstance({
+          ...defaults,
+          particleCount: 15,
+          scalar: 2,
+          shapes: ['heart'],
+          origin: { x: Math.random(), y: Math.random() - 0.2 },
+          colors: ['#ff3b7a', '#ff0000']
+        });
+
+        // Canons latéraux
+        confettiInstance({
+          particleCount: 40,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#ff3b7a', '#ffffff']
+        });
+        confettiInstance({
+          particleCount: 40,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#ff3b7a', '#ffffff']
+        });
+
+      }, 200);
     }
 
     let yesScale = 1;
     function growYes() {
-      yesScale = Math.min(4, yesScale + 0.2);
+      yesScale = Math.min(5, yesScale + 0.25);
       yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
     }
 
     function moveNo() {
       const z = zone.getBoundingClientRect();
       const b = noBtn.getBoundingClientRect();
-      
       const maxX = z.width - b.width;
       const maxY = z.height - b.height;
-      
       const randomX = Math.floor(Math.random() * maxX);
       const randomY = Math.floor(Math.random() * maxY);
 
       noBtn.style.left = randomX + "px";
       noBtn.style.top = randomY + "px";
       noBtn.style.right = "auto";
-      
       growYes();
     }
 
     noBtn.addEventListener("mouseover", moveNo);
-    noBtn.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      moveNo();
-    });
+    noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); moveNo(); });
 
     yesBtn.addEventListener("click", () => {
       mainContent.style.display = "none";
       result.style.display = "block";
-      launchConfetti();
+      launchMassiveConfetti();
     });
   </script>
 </body>
