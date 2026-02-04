@@ -132,7 +132,7 @@
 
     <div class="result" id="result">
       <h2 style="font-size: 40px; color: #ff3b7a; margin: 0;">INCROYABLE ! 😍</h2>
-      <img class="final-gif" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3Bhem9keGZuY3hzMWtlMzJlbTZzMmR5dnN0aGV2bnc0ZnE1anMyeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/D7FKeDLnNzeBmJRjp9/giphy.gif">
+      <img class="final-gif" src="https://64.media.tumblr.com/a531812986744b45833a4a52b3757c45/tumblr_mkusmvCzRp1rv7cdvo2_500.gif">
     </div>
   </main>
 
@@ -154,7 +154,7 @@
         noBtn.style.top = y + 'px';
         noBtn.style.transform = 'none';
 
-        scale += 0.35;
+        scale += 0.4; // Grossit rapidement
         yesBtn.style.left = "50%";
         yesBtn.style.top = "50%";
         yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
@@ -169,35 +169,31 @@
         
         const colors = ['#ff3b7a', '#ffffff', '#ff99bb', '#ff0055'];
         
-        // 1. Triple explosion initiale (Gauche, Centre, Droite)
-        myConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6, x: 0.5 }, colors });
-        myConfetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors });
-        myConfetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors });
+        // Explosion initiale massive
+        myConfetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors });
+        myConfetti({ particleCount: 100, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors });
+        myConfetti({ particleCount: 100, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors });
 
-        // 2. Pluie de cœurs qui dure 8 secondes
-        const end = Date.now() + 8000;
+        // Pluie prolongée (10 secondes)
+        const end = Date.now() + 10000;
         (function frame() {
             myConfetti({
-                particleCount: 3,
-                angle: 60,
-                spread: 80,
-                origin: { x: 0 },
-                colors: colors
-            });
-            myConfetti({
-                particleCount: 3,
-                angle: 120,
-                spread: 80,
-                origin: { x: 1 },
-                colors: colors
-            });
-            myConfetti({
-                particleCount: 2,
-                shapes: ['heart'],
-                scalar: 2,
+                particleCount: 5,
+                angle: Math.random() * 360,
+                spread: 90,
                 origin: { x: Math.random(), y: Math.random() - 0.2 },
-                colors: ['#ff3b7a', '#ff0000']
+                colors: colors
             });
+            // Coeurs aléatoires
+            if(Math.random() > 0.7) {
+                myConfetti({
+                    particleCount: 2,
+                    shapes: ['heart'],
+                    scalar: 2,
+                    origin: { x: Math.random(), y: Math.random() - 0.2 },
+                    colors: ['#ff3b7a', '#ff0000']
+                });
+            }
 
             if (Date.now() < end) {
                 requestAnimationFrame(frame);
