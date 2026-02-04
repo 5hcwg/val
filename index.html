@@ -167,33 +167,36 @@
         document.getElementById('mainContent').style.display = 'none';
         document.getElementById('result').style.display = 'block';
         
-        // --- CONFETTIS BIEN DOSÉS ---
-        const colors = ['#ff3b7a', '#ffffff', '#ff99bb'];
+        const colors = ['#ff3b7a', '#ffffff', '#ff99bb', '#ff0055'];
         
-        // 1. Grosse explosion au clic
-        myConfetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: colors
-        });
+        // 1. Triple explosion initiale (Gauche, Centre, Droite)
+        myConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6, x: 0.5 }, colors });
+        myConfetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors });
+        myConfetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors });
 
-        // 2. Petites rafales pendant 5 secondes
-        const end = Date.now() + 5000;
+        // 2. Pluie de cœurs qui dure 8 secondes
+        const end = Date.now() + 8000;
         (function frame() {
             myConfetti({
-                particleCount: 2,
+                particleCount: 3,
                 angle: 60,
-                spread: 55,
+                spread: 80,
                 origin: { x: 0 },
                 colors: colors
             });
             myConfetti({
-                particleCount: 2,
+                particleCount: 3,
                 angle: 120,
-                spread: 55,
+                spread: 80,
                 origin: { x: 1 },
                 colors: colors
+            });
+            myConfetti({
+                particleCount: 2,
+                shapes: ['heart'],
+                scalar: 2,
+                origin: { x: Math.random(), y: Math.random() - 0.2 },
+                colors: ['#ff3b7a', '#ff0000']
             });
 
             if (Date.now() < end) {
